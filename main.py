@@ -2,6 +2,7 @@ import screed
 import subprocess
 import mmh3
 import numpy as np
+import pandas as pd
 
 def get_kmers_in_file(filename, k):
 	# run jellyfish
@@ -12,6 +13,8 @@ def get_kmers_in_file(filename, k):
 	args = cmd.split(' ')
 	subprocess.call(args)
 	# open output file
+	df = pd.read_csv('tmp-dump', delimiter=' ')
+	print(df)
 	# construct set
 	# return the set
 	
