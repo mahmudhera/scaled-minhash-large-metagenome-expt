@@ -42,7 +42,20 @@ def generate_c_percent_of_file(c, genome_filename, out_filename):
 	
 if __name__ == "__main__":
 	mg_filename = "reads_file.fastq"
+	g_filename = 'staphylococcus.fasta'
+	smallg_filename = 'temp.fasta'
 	k = 21
+	containment_ranges = [0.01] + [0.1*i for i in range(1, 10)] + [0.99]
 	
-	s = get_kmers_in_file(mg_filename, k)
-	print(len(s), s[0])
+	a1 = get_kmers_in_file(mg_filename, k)
+	b = get_kmers_in_file(g_filename, k)
+	
+	print(len(a1), a[0])
+	print(len(b), b[0])
+	
+	print("---")
+	
+	for C in containment_ranges:
+		extract_part_of_genome(C, g_filename, smallg_filename)
+		a2 = get_kmers_in_file(smallg_filename, k)
+		print(len(a2), a2[0])
