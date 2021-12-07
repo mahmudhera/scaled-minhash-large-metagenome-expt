@@ -13,8 +13,9 @@ def get_kmers_in_file(filename, k):
 	args = cmd.split(' ')
 	subprocess.call(args)
 	# open output file
-	df = pd.read_csv('tmp-dump', delimiter=' ')
-	print(df)
+	df = pd.read_csv('tmp-dump', delimiter=' ', header=None)
+	printf(df)
+	#list = 
 	# construct set
 	# return the set
 	
