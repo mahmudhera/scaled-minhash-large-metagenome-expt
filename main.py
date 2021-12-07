@@ -14,8 +14,8 @@ def get_kmers_in_file(filename, k):
 	subprocess.call(args)
 	# open output file
 	df = pd.read_csv('tmp-dump', delimiter=' ', header=None)
-	print(df)
-	#list = 
+	list_kmers = df.iloc[:,0].tolist()
+	return list_kmers
 	# construct set
 	# return the set
 	
@@ -45,3 +45,4 @@ if __name__ == "__main__":
 	k = 21
 	
 	s = get_kmers_in_file(mg_filename, k)
+	print(len(s), s[0])
