@@ -38,5 +38,6 @@ def generate_c_percent_of_file(c, genome_filename, out_filename):
 	
 if __name__ == "__main__":
 	mg_filename = "reads_file.fastq"
+	k = 21
 	
-	s = get_kmers_in_file(mg_filename)
+	s = get_kmers_in_file(mg_filename, k)
