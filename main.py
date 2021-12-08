@@ -120,6 +120,8 @@ if __name__ == "__main__":
 	print('generating sketch for a1')
 	smh1 = create_scaled_minhash(a1, seed, scale_facor)
 	print(smh1.get_sketch_size())
+	smh_large = create_scaled_minhash(a1, seed, 1.0)
+	print(smh_large.get_sketch_size())
 	
 	print('generating sketch for b')
 	smh2 = create_scaled_minhash(b, seed, scale_facor)
@@ -132,6 +134,9 @@ if __name__ == "__main__":
 		
 		smh3 = add_kmers_in_scaled_minhash(a2, smh1, seed)
 		print(smh1.get_sketch_size(), smh3.get_sketch_size())
+		
+		add_kmers_in_scaled_minhash(smh_large, seed, 1.0)
+		print(smh_large.get_sketch_size())
 		
 		print("Scaled containment: C(small in large):")
 		print(smh3.get_scaled_containment(smh2))
