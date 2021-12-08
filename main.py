@@ -130,9 +130,8 @@ if __name__ == "__main__":
 		a2 = get_kmers_in_file(smallg_filename, k)
 		print(len(a2), a2[0])
 		
-		smh1 = add_kmers_in_scaled_minhash(a2, smh1, seed)
-		print(smh1.get_sketch_size())
+		smh3 = add_kmers_in_scaled_minhash(a2, smh1, seed)
+		print(smh1.get_sketch_size(), smh3.get_sketch_size())
 		
-		print("Scaled containment:")
-		print(smh2.get_scaled_containment(smh1))
-		print(smh1.get_scaled_containment(smh2))
+		print("Scaled containment: C(small in large):")
+		print(smh3.get_scaled_containment(smh2))
