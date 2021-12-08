@@ -98,9 +98,10 @@ def generate_c_percent_of_file(c, genome_filename, out_filename):
 	
 	
 if __name__ == "__main__":
-	mg_filename = "reads_file.fastq"
-	#g_filename = 'staphylococcus.fasta'
-	g_filename = 'SRR492065.contigs.fa'
+	#mg_filename = "reads_file.fastq"
+	mg_filename = 'SRR492065.contigs.fa'
+	g_filename = 'staphylococcus.fasta'
+	#g_filename = 'SRR492065.contigs.fa'
 	smallg_filename = 'temp.fasta'
 	k = 21
 	#containment_ranges = [0.01] + [0.1*i for i in range(1, 10)] + [0.99]
