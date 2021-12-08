@@ -135,3 +135,4 @@ if __name__ == "__main__":
 		
 		print("Scaled containment:")
 		print(smh2.get_scaled_containment(smh1))
+		print(smh1.get_scaled_containment(smh2))
