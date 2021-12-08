@@ -109,7 +109,7 @@ if __name__ == "__main__":
 	print("---")
 	
 	for C in containment_ranges:
-		extract_part_of_genome(C, g_filename, smallg_filename)
+		generate_c_percent_of_file(C, g_filename, smallg_filename)
 		a2 = get_kmers_in_file(smallg_filename, k)
 		print(len(a2), a2[0])
 		
