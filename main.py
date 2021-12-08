@@ -52,6 +52,13 @@ def create_scaled_minhash(kmers, seed, scale_facor):
 		h = get_hash_from_kmer(kmer, seed)
 		smh1.add_value(h)
 	return smh1
+	
+def add_kmers_in_scaled_minhash(kmers, smh, seed):
+	H = 2**64
+	for kmer in kmers:
+		h = get_hash_from_kmer(kmer, seed)
+		smh.add_value(h)
+	return smh
 
 
 def get_kmers_in_file(filename, k):
@@ -108,15 +115,22 @@ if __name__ == "__main__":
 	
 	print("---")
 	
+	print('generating sketch for a1')
+	smh1 = create_scaled_minhash(a1, seed, scale_facor)
+	print(smh1.get_sketch_size())
+	
+	print('generating sketch for b')
+	smh2 = create_scaled_minhash(b, seed, scale_facor)
+	print(smh2.get_sketch_size())
+	
 	for C in containment_ranges:
 		generate_c_percent_of_file(C, g_filename, smallg_filename)
 		a2 = get_kmers_in_file(smallg_filename, k)
 		print(len(a2), a2[0])
 		
-		print('generating sketch for a1 and a2')
-		smh1 = create_scaled_minhash(a1+a2, seed, scale_facor)
+		add_kmers_in_scaled_minhash(smh1, a2, seed)
 		print(smh1.get_sketch_size())
 		
-		print('generating sketch for b')
-		smh2 = create_scaled_minhash(b, seed, scale_facor)
-		print(smh2.get_sketch_size())
+		print("Scaled containment:")
+		print(smh1.get_scaled_containment(smh2))
+		print(smh2.get_scaled_containment(smh1))
