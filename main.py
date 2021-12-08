@@ -4,6 +4,56 @@ import mmh3
 import numpy as np
 import pandas as pd
 
+
+class ScaledMinHash:
+    def __init__(self, scale_factor, max_hash_value):
+        self.hash_set = set()
+        self.H = max_hash_value
+        self.scale_factor = scale_factor
+        self.raw_elements = set()
+        
+    def add_value(self, hash_value):
+        if hash_value <= self.H * self.scale_factor:
+            self.hash_set.add(hash_value)
+        self.raw_elements.add(hash_value)
+            
+    def add_values(self, hash_values):
+        for hash_value in hash_values:
+            self.add_value(hash_value)
+            
+    def remove(self, hash_value):
+        self.hash_set -= hash_value
+        
+    def print_hash_set(self):
+        print(self.H, self.scale_factor, self.hash_set)
+        
+    def get_containment(self, smh):
+        return 1.0 * len(self.hash_set.intersection(smh.hash_set)) / len(self.hash_set)
+    
+    def get_scaled_containment(self, smh):
+        bf = 1 - (1 - self.scale_factor) ** len(self.raw_elements)
+        return 1.0 * len(self.hash_set.intersection(smh.hash_set)) / ( len(self.hash_set) * bf )
+
+    def get_sketch_size(self):
+        return len( self.hash_set )
+
+
+def get_hash_from_kmer(kmer, seed=0):
+	hash_value = mmh3.hash64(kmer, seed=seed)[0]
+	if hash_value < 0:
+		hash_value += 2**64
+	return hash_value
+	
+	
+def create_scaled_minhash(kmers, seed, scale_facor):
+	H = 2**64
+	smh1 = ScaledMinHash(scale_facor, H)
+	for kmer in kmers:
+		h = get_hash_from_kmer(kmer, seed)
+		smh1.add_value(h)
+	return smh1
+
+
 def get_kmers_in_file(filename, k):
 	# run jellyfish
 	cmd = "jellyfish count -m " + str(k) + " -s 2G -t 32 -o tmp -C -L 1 -U 99999999 " + filename
@@ -45,12 +95,15 @@ if __name__ == "__main__":
 	g_filename = 'staphylococcus.fasta'
 	smallg_filename = 'temp.fasta'
 	k = 21
-	containment_ranges = [0.01] + [0.1*i for i in range(1, 10)] + [0.99]
+	#containment_ranges = [0.01] + [0.1*i for i in range(1, 10)] + [0.99]
+	containment_ranges = [0.2]
+	scale_facor = 0.0001
+	seed = 1
 	
 	a1 = get_kmers_in_file(mg_filename, k)
 	b = get_kmers_in_file(g_filename, k)
 	
-	print(len(a1), a[0])
+	print(len(a1), a1[0])
 	print(len(b), b[0])
 	
 	print("---")
@@ -59,3 +112,11 @@ if __name__ == "__main__":
 		extract_part_of_genome(C, g_filename, smallg_filename)
 		a2 = get_kmers_in_file(smallg_filename, k)
 		print(len(a2), a2[0])
+		
+		print('generating sketch for a1 and a2')
+		smh1 = create_scaled_minhash(a1+a2, seed, scale_facor)
+		print(smh1.get_sketch_size())
+		
+		print('generating sketch for b')
+		smh2 = create_scaled_minhash(b, seed, scale_facor)
+		print(smh2.get_sketch_size())
