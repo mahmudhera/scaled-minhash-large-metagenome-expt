@@ -133,8 +133,8 @@ if __name__ == "__main__":
 		generate_c_percent_of_file(C, g_filename, smallg_filename)
 		kmers_in_small_portion = get_kmers_in_file(smallg_filename, k)
 		
+		scaled_containments = []
 		for seed in seeds:
-		
 			sketch_genome = sketches_genome[seed]
 			sketch_metagenome = sketches_metagenome[seed]
 		
@@ -145,7 +145,9 @@ if __name__ == "__main__":
 			
 			print("seed: " + str(seed))
 			print('for this seed, containment is: ')
-			print(sketch_added.get_scaled_containment(sketch_genome))
+			sc_c = sketch_added.get_scaled_containment(sketch_genome)
+			scaled_containments.append(sc_c)
+			print(sc_c)
 		
 		# list = []
 		
