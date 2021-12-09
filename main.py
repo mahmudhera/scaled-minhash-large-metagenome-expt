@@ -104,28 +104,32 @@ if __name__ == "__main__":
 	#containment_ranges = [0.01] + [0.1*i for i in range(1, 10)] + [0.99]
 	containment_ranges = [0.2]
 	scale_facor = 0.0001
+	num_runs = 2
+	seed_values = [i for i in range(num_runs)]
 	seed = 1
 	
-	a1 = get_kmers_in_file(mg_filename, k)
-	b = get_kmers_in_file(g_filename, k)
+	kmers_in_metagenome = get_kmers_in_file(mg_filename, k)
+	kmers_in_genome = get_kmers_in_file(g_filename, k)
 	
-	print('generating sketch for a1')
-	smh1 = create_scaled_minhash(a1, seed, scale_facor)
-	print(smh1.get_sketch_size())
+	print('generating sketch for metagenome')
+	sketch_metagenome = create_scaled_minhash(kmers_in_metagenome, seed, scale_facor)
+	print('sketch_size:')
+	print(sketch_metagenome.get_sketch_size())
 	
-	print('generating sketch for b')
-	smh2 = create_scaled_minhash(b, seed, scale_facor)
-	print(smh2.get_sketch_size())
+	print('generating sketch for kmers in genome')
+	sketch_genome = create_scaled_minhash(kmers_in_genome, seed, scale_facor)
+	print('sketch size:')
+	print(sketch_genome.get_sketch_size())
 	
 	for C in containment_ranges:
 		generate_c_percent_of_file(C, g_filename, smallg_filename)
-		a2 = get_kmers_in_file(smallg_filename, k)
-		print(len(a2), a2[0])
+		kmers_in_small_portion = get_kmers_in_file(smallg_filename, k)
 		
 		#write fn to create new smh, then add these new kmers
-		sketch_new = ScaledMinHash( smh1.scale_factor, smh1.H, smh1.hash_set )
-		add_kmers_in_scaled_minhash(a2, sketch_new, 1)
-		print(smh1.get_sketch_size(), sketch_new.get_sketch_size())
+		sketch_new = ScaledMinHash( sketch_metagenome.scale_factor, sketch_metagenome.H, sketch_metagenome.hash_set )
+		add_kmers_in_scaled_minhash(kmers_in_small_portion, sketch_new, 1)
+		print('added kmers in small genome in sketch. new sletch size:')
+		print(sketch_new.get_sketch_size())
 		
 		# list = []
 		
@@ -139,8 +143,12 @@ if __name__ == "__main__":
 		
 		# after loop, output the value and variance with C
 		
-		unique_kmers_union = set(a1+b+a2)
+		unique_kmers_union = set(kmers_in_genome + kmers_in_metagenome + kmers_in_small_portion)
+		print('Unique kmers in union:')
 		print(len(unique_kmers_union))
 		
-		print("Scaled containment: C(small in large):")
-		print(smh1.get_scaled_containment(smh2))
+		print("Scaled containment: C(genome in metagenome):")
+		print(sketch_metagenome.get_scaled_containment(sketch_genome))
+		
+		print("Scaled containment: C(genome in metagenome+small):")
+		print(sketch_new.get_scaled_containment(sketch_genome))
