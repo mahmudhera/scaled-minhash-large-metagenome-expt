@@ -133,11 +133,19 @@ if __name__ == "__main__":
 		generate_c_percent_of_file(C, g_filename, smallg_filename)
 		kmers_in_small_portion = get_kmers_in_file(smallg_filename, k)
 		
-		#write fn to create new smh, then add these new kmers
-		sketch_new = ScaledMinHash( sketch_metagenome.scale_factor, sketch_metagenome.H, sketch_metagenome.hash_set )
-		add_kmers_in_scaled_minhash(kmers_in_small_portion, sketch_new, 1)
-		print('added kmers in small genome in sketch. new sletch size:')
-		print(sketch_new.get_sketch_size())
+		for seed in seeds:
+		
+			sketch_genome = sketches_genome[seed]
+			sketch_metagenome = sketches_metagenome[seed]
+		
+			sketch_new = ScaledMinHash( sketch_metagenome.scale_factor, sketch_metagenome.H, sketch_metagenome.hash_set )
+			add_kmers_in_scaled_minhash(kmers_in_small_portion, sketch_new, seed)
+			print('added kmers in small genome in sketch. new sletch size:')
+			print(sketch_added.get_sketch_size())
+			
+			print("seed: " + str(seed))
+			print('for this seed, containment is: ')
+			print(sketch_added.get_scaled_containment(sketch_genome))
 		
 		# list = []
 		
@@ -151,12 +159,12 @@ if __name__ == "__main__":
 		
 		# after loop, output the value and variance with C
 		
-		unique_kmers_union = set(kmers_in_genome + kmers_in_metagenome + kmers_in_small_portion)
-		print('Unique kmers in union:')
-		print(len(unique_kmers_union))
+		#unique_kmers_union = set(kmers_in_genome + kmers_in_metagenome + kmers_in_small_portion)
+		#print('Unique kmers in union:')
+		#print(len(unique_kmers_union))
 		
-		print("Scaled containment: C(genome in metagenome):")
-		print(sketch_metagenome.get_scaled_containment(sketch_genome))
+		#print("Scaled containment: C(genome in metagenome):")
+		#print(sketch_metagenome.get_scaled_containment(sketch_genome))
 		
-		print("Scaled containment: C(genome in metagenome+small):")
-		print(sketch_new.get_scaled_containment(sketch_genome))
+		#print("Scaled containment: C(genome in metagenome+small):")
+		#print(sketch_new.get_scaled_containment(sketch_genome))
