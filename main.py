@@ -142,15 +142,15 @@ def create_super_metagenome(metagenome_filename, small_genome_filename, super_mg
 
 f = open('results', 'w')
 
-#mg_filename = "reads_file.fastq"
-mg_filename = 'SRR492190.contigs.fa'
+mg_filename = "reads_file.fastq"
+#mg_filename = 'SRR492190.contigs.fa'
 g_filename = 'staphylococcus.fasta'
 smallg_filename = 'temp.fasta'
 k = 21
-#containment_ranges = [0.01] + [0.1*i for i in range(1, 10)] + [0.99]
-containment_ranges = [0.2]
+containment_ranges = [0.01] + [0.1*i for i in range(1, 10)] + [0.99]
+#containment_ranges = [0.2]
 scale_facor = 0.0005
-num_runs = 2
+num_runs = 20
 seeds = [i for i in range(num_runs)]
 seed = 1
 
@@ -198,6 +198,7 @@ for C in containment_ranges:
 	unique_kmers_union = set(kmers_in_genome + kmers_in_metagenome + kmers_in_small_portion)
 	size_union = len(unique_kmers_union)
 	sketch_size = sketch_genome.get_sketch_size()
+	print('Mash sketch size used: ' + str(sketch_size))
 	size_genome = len(set(kmers_in_genome))
 	mash_containments = get_mash_containments(g_filename, smg_filename, sketch_size, size_union, size_genome, num_runs)
 	
