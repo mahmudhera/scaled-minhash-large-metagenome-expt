@@ -105,7 +105,7 @@ if __name__ == "__main__":
 	containment_ranges = [0.2]
 	scale_facor = 0.0001
 	num_runs = 2
-	seed_values = [i for i in range(num_runs)]
+	seeds = [i for i in range(num_runs)]
 	seed = 1
 	
 	kmers_in_metagenome = get_kmers_in_file(mg_filename, k)
