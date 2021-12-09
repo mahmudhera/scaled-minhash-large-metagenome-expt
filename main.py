@@ -102,7 +102,7 @@ if __name__ == "__main__":
 	smallg_filename = 'temp.fasta'
 	k = 21
 	#containment_ranges = [0.01] + [0.1*i for i in range(1, 10)] + [0.99]
-	containment_ranges = [0.05]
+	containment_ranges = [0.05, 0.2, 0.5]
 	scale_facor = 0.0005
 	num_runs = 2
 	seeds = [i for i in range(num_runs)]
@@ -132,10 +132,13 @@ if __name__ == "__main__":
 	for C in containment_ranges:
 		generate_c_percent_of_file(C, g_filename, smallg_filename)
 		kmers_in_small_portion = get_kmers_in_file(smallg_filename, k)
-		print('kmers in small part: ' + str(len(kmers_in_small_portion)))
-		smh_sketch_test = ScaledMinHash(scale_facor, 2**64)
-		add_kmers_in_scaled_minhash(kmers_in_small_portion, smh_sketch_test, 0)
-		print('size of sketch: ' + str(smh_sketch_test.get_sketch_size()) )
+		#print('kmers in small part: ' + str(len(kmers_in_small_portion)))
+		
+		s1 = ScaledMinHash(1.0, 2**64)
+		add_kmers_in_scaled_minhash(kmers_in_metagenome + kmers_in_small_portion, s1, 0)
+		s2 = ScaledMinHash(1.0, 2**64)
+		add_kmers_in_scaled_minhash(kmers_in_genome, s2, 0)
+		print('true containment: ' str(s2.get_containment(s1)))
 		
 		scaled_containments = []
 		for seed in seeds:
@@ -144,15 +147,15 @@ if __name__ == "__main__":
 		
 			sketch_added = ScaledMinHash( sketch_metagenome.scale_factor, sketch_metagenome.H, sketch_metagenome.hash_set )
 			add_kmers_in_scaled_minhash(kmers_in_small_portion, sketch_added, seed)
-			print('added kmers in small genome in sketch. new sletch size:')
-			print(sketch_added.get_sketch_size())
+			#print('added kmers in small genome in sketch. new sletch size:')
+			#print(sketch_added.get_sketch_size())
 			
-			print("seed: " + str(seed))
-			print('for this seed, containment is: ')
+			#print("seed: " + str(seed))
+			#print('for this seed, containment is: ')
 			sc_c = sketch_genome.get_scaled_containment(sketch_added)
 			scaled_containments.append(sc_c)
-			print(sc_c)
-			print(sketch_added.get_scaled_containment(sketch_genome))
+			#print(sc_c)
+			#print(sketch_added.get_scaled_containment(sketch_genome))
 		
 		print(C, scaled_containments)
 		
