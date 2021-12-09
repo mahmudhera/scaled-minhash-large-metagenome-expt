@@ -149,7 +149,7 @@ if __name__ == "__main__":
 			
 			print("seed: " + str(seed))
 			print('for this seed, containment is: ')
-			sc_c = sketch_added.get_scaled_containment(sketch_genome)
+			sc_c = sketch_added.get_containment(sketch_genome)
 			scaled_containments.append(sc_c)
 			print(sc_c)
 		
