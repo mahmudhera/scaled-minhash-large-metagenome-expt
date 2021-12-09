@@ -118,7 +118,7 @@ if __name__ == "__main__":
 	print('sketch_sizes:')
 	print([sketches_metagenome[seed].get_sketch_size() for seed in seeds])
 	
-	sketch_metagenome = sketches_metagenome[0]
+	sketch_metagenome = sketches_metagenome[1]
 	
 	print('generating sketch for kmers in genome')
 	sketch_genome = create_scaled_minhash(kmers_in_genome, seed, scale_facor)
