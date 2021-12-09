@@ -134,4 +134,4 @@ if __name__ == "__main__":
 		print(len(unique_kmers_union))
 		
 		print("Scaled containment: C(small in large):")
-		print(smh3.get_scaled_containment(smh2))
+		print(smh1.get_scaled_containment(smh2))
