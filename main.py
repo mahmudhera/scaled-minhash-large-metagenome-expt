@@ -187,6 +187,7 @@ if __name__ == "__main__":
 		add_kmers_in_scaled_minhash(kmers_in_small_portion, all_hashes_super_mg, 0)
 		print('true containment: ' + str(all_hashes_genome.get_containment(all_hashes_super_mg)))
 		
+		print('now doing mash runs..')
 		smg_filename = 'supermetagenome.fasta'
 		create_super_metagenome(mg_filename, smallg_filename, smg_filename)
 		unique_kmers_union = set(kmers_in_genome + kmers_in_metagenome + kmers_in_small_portion)
@@ -211,7 +212,7 @@ if __name__ == "__main__":
 			#print('for this seed, containment is: ')
 			sc_c = sketch_genome.get_scaled_containment(sketch_added)
 			scaled_containments.append(sc_c)
-			#print(sc_c)
+			print(seed, sc_c)
 			#print(sketch_added.get_scaled_containment(sketch_genome))
 		
 		print(C, scaled_containments)
