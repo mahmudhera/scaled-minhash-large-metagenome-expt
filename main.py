@@ -6,8 +6,11 @@ import pandas as pd
 
 
 class ScaledMinHash:
-    def __init__(self, scale_factor, max_hash_value):
-        self.hash_set = set()
+    def __init__(self, scale_factor, max_hash_value, initial_set):
+        if initial_set is not None:
+			self.hash_set = set()
+		else:
+			self.hash_set = set(initial_set)
         self.H = max_hash_value
         self.scale_factor = scale_factor
         self.raw_elements = set()
@@ -73,8 +76,6 @@ def get_kmers_in_file(filename, k):
 	df = pd.read_csv('tmp-dump', delimiter=' ', header=None)
 	list_kmers = df.iloc[:,0].tolist()
 	return list_kmers
-	# construct set
-	# return the set
 	
 
 # c is float, 0 < c < 1
@@ -112,11 +113,6 @@ if __name__ == "__main__":
 	a1 = get_kmers_in_file(mg_filename, k)
 	b = get_kmers_in_file(g_filename, k)
 	
-	print(len(a1), a1[0])
-	print(len(b), b[0])
-	
-	print("---")
-	
 	print('generating sketch for a1')
 	smh1 = create_scaled_minhash(a1, seed, scale_facor)
 	print(smh1.get_sketch_size())
@@ -129,6 +125,23 @@ if __name__ == "__main__":
 		generate_c_percent_of_file(C, g_filename, smallg_filename)
 		a2 = get_kmers_in_file(smallg_filename, k)
 		print(len(a2), a2[0])
+		
+		#write fn to create new smh, then add these new kmers
+		sketch_new = ScaledMinHash( smh1.scale_facor, smh1.max_hash_value, smh1.hash_set )
+		add_kmers_in_scaled_minhash(a2, sketch_new, 1)
+		print(smh1.get_sketch_size(), sketch_new.get_sketch_size())
+		
+		# list = []
+		
+		# for seed in all_seeds:
+			# determine num_union
+			# know how many kmers in one of them already
+			# get mash jaccard
+			# get mash containment
+			# create two msh sketches, and get scaled_containment
+			# add values in the list
+		
+		# after loop, output the value and variance with C
 		
 		unique_kmers_union = set(a1+b+a2)
 		print(len(unique_kmers_union))
