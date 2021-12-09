@@ -96,7 +96,7 @@ def generate_c_percent_of_file(c, genome_filename, out_filename):
 	
 if __name__ == "__main__":
 	#mg_filename = "reads_file.fastq"
-	mg_filename = 'SRR492065.contigs.fa'
+	mg_filename = 'SRR492190.contigs.fa'
 	g_filename = 'staphylococcus.fasta'
 	#g_filename = 'SRR492065.contigs.fa'
 	smallg_filename = 'temp.fasta'
