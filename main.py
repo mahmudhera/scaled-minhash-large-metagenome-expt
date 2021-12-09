@@ -138,7 +138,7 @@ if __name__ == "__main__":
 		add_kmers_in_scaled_minhash(kmers_in_metagenome + kmers_in_small_portion, s1, 0)
 		s2 = ScaledMinHash(1.0, 2**64)
 		add_kmers_in_scaled_minhash(kmers_in_genome, s2, 0)
-		print('true containment: ' str(s2.get_containment(s1)))
+		print('true containment: ' + str(s2.get_containment(s1)))
 		
 		scaled_containments = []
 		for seed in seeds:
