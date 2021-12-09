@@ -132,6 +132,7 @@ if __name__ == "__main__":
 	for C in containment_ranges:
 		generate_c_percent_of_file(C, g_filename, smallg_filename)
 		kmers_in_small_portion = get_kmers_in_file(smallg_filename, k)
+		print('kmers in small part: ' + str(len(kmers_in_small_portion)))
 		
 		scaled_containments = []
 		for seed in seeds:
