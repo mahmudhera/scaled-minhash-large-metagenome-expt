@@ -149,6 +149,8 @@ if __name__ == "__main__":
 			scaled_containments.append(sc_c)
 			print(sc_c)
 		
+		print(C, scaled_containments)
+		
 		# list = []
 		
 		# for seed in all_seeds:
