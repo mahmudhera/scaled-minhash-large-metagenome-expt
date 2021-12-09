@@ -6,7 +6,7 @@ import pandas as pd
 
 
 class ScaledMinHash:
-    def __init__(self, scale_factor, max_hash_value, initial_set=None):
+	def __init__(self, scale_factor, max_hash_value, initial_set=None):
 		if initial_set is None:
 			self.hash_set = set()
 		else:
