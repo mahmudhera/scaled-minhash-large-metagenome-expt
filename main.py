@@ -11,9 +11,9 @@ class ScaledMinHash:
 			self.hash_set = set()
 		else:
 			self.hash_set = set(initial_set)
-        self.H = max_hash_value
-        self.scale_factor = scale_factor
-        self.raw_elements = set()
+		self.H = max_hash_value
+		self.scale_factor = scale_factor
+		self.raw_elements = set()
         
     def add_value(self, hash_value):
         if hash_value <= self.H * self.scale_factor:
