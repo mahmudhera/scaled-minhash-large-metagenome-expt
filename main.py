@@ -133,6 +133,9 @@ if __name__ == "__main__":
 		generate_c_percent_of_file(C, g_filename, smallg_filename)
 		kmers_in_small_portion = get_kmers_in_file(smallg_filename, k)
 		print('kmers in small part: ' + str(len(kmers_in_small_portion)))
+		smh_sketch_test = ScaledMinHash(scale_facor, 2**64)
+		add_kmers_in_scaled_minhash(kmers_in_small_portion, smh_sketch_test, 0)
+		print('size of sketch: ' + str(smh_sketch_test.get_sketch_size()) )
 		
 		scaled_containments = []
 		for seed in seeds:
