@@ -123,7 +123,7 @@ if __name__ == "__main__":
 		print(len(a2), a2[0])
 		
 		#write fn to create new smh, then add these new kmers
-		sketch_new = ScaledMinHash( smh1.scale_factor, smh1.max_hash_value, smh1.hash_set )
+		sketch_new = ScaledMinHash( smh1.scale_factor, smh1.H, smh1.hash_set )
 		add_kmers_in_scaled_minhash(a2, sketch_new, 1)
 		print(smh1.get_sketch_size(), sketch_new.get_sketch_size())
 		
