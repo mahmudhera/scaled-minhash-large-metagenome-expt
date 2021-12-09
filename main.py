@@ -138,14 +138,14 @@ def create_super_metagenome(metagenome_filename, small_genome_filename, super_mg
     f.close()
 	
 if __name__ == "__main__":
-	#mg_filename = "reads_file.fastq"
-	mg_filename = 'SRR492190.contigs.fa'
+	mg_filename = "reads_file.fastq"
+	#mg_filename = 'SRR492190.contigs.fa'
 	g_filename = 'staphylococcus.fasta'
 	#g_filename = 'SRR492065.contigs.fa'
 	smallg_filename = 'temp.fasta'
 	k = 21
 	#containment_ranges = [0.01] + [0.1*i for i in range(1, 10)] + [0.99]
-	containment_ranges = [0.05, 0.2, 0.5]
+	containment_ranges = [0.2]
 	scale_facor = 0.0005
 	num_runs = 2
 	seeds = [i for i in range(num_runs)]
