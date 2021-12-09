@@ -138,8 +138,8 @@ if __name__ == "__main__":
 			sketch_genome = sketches_genome[seed]
 			sketch_metagenome = sketches_metagenome[seed]
 		
-			sketch_new = ScaledMinHash( sketch_metagenome.scale_factor, sketch_metagenome.H, sketch_metagenome.hash_set )
-			add_kmers_in_scaled_minhash(kmers_in_small_portion, sketch_new, seed)
+			sketch_added = ScaledMinHash( sketch_metagenome.scale_factor, sketch_metagenome.H, sketch_metagenome.hash_set )
+			add_kmers_in_scaled_minhash(kmers_in_small_portion, sketch_added, seed)
 			print('added kmers in small genome in sketch. new sletch size:')
 			print(sketch_added.get_sketch_size())
 			
