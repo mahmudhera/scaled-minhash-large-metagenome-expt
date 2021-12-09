@@ -102,8 +102,8 @@ if __name__ == "__main__":
 	smallg_filename = 'temp.fasta'
 	k = 21
 	#containment_ranges = [0.01] + [0.1*i for i in range(1, 10)] + [0.99]
-	containment_ranges = [0.2]
-	scale_facor = 0.0001
+	containment_ranges = [0.2, 0.4]
+	scale_facor = 0.0002
 	num_runs = 2
 	seeds = [i for i in range(num_runs)]
 	seed = 1
