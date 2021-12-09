@@ -120,10 +120,13 @@ if __name__ == "__main__":
 	
 	sketch_metagenome = sketches_metagenome[1]
 	
-	print('generating sketch for kmers in genome')
-	sketch_genome = create_scaled_minhash(kmers_in_genome, seed, scale_facor)
-	print('sketch size:')
-	print(sketch_genome.get_sketch_size())
+	sketches_genome = {}
+	print('generating sketches for kmers in genome')
+		sketches_genome[seed] = create_scaled_minhash(kmers_in_genome, seed, scale_facor)
+	print('sketch sizes:')
+	print([sketches_genome[seed].get_sketch_size() for seed in seeds])
+	
+	sketch_genome = sketches_genome[1]
 	
 	for C in containment_ranges:
 		generate_c_percent_of_file(C, g_filename, smallg_filename)
