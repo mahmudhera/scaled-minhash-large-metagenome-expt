@@ -14,33 +14,29 @@ class ScaledMinHash:
 		self.H = max_hash_value
 		self.scale_factor = scale_factor
 		self.raw_elements = set()
-        
-    def add_value(self, hash_value):
-        if hash_value <= self.H * self.scale_factor:
-            self.hash_set.add(hash_value)
-        self.raw_elements.add(hash_value)
-            
-    def add_values(self, hash_values):
-        for hash_value in hash_values:
-            self.add_value(hash_value)
-            
-    def remove(self, hash_value):
-        self.hash_set -= hash_value
-        
-    def print_hash_set(self):
-        print(self.H, self.scale_factor, self.hash_set)
-        
-    def get_containment(self, smh):
-        return 1.0 * len(self.hash_set.intersection(smh.hash_set)) / len(self.hash_set)
+	
+	def add_value(self, hash_value):
+		if hash_value <= self.H * self.scale_factor:
+			self.hash_set.add(hash_value)
+		self.raw_elements.add(hash_value)
+	
+	def add_values(self, hash_values):
+		for hash_value in hash_values:
+			self.add_value(hash_value)
     
-    def get_scaled_containment(self, smh):
-        bf = 1 - (1 - self.scale_factor) ** len(self.raw_elements)
-        return 1.0 * len(self.hash_set.intersection(smh.hash_set)) / ( len(self.hash_set) * bf )
+	def remove(self, hash_value):
+		self.hash_set -= hash_value
+	
+	def get_containment(self, smh):
+		return 1.0 * len(self.hash_set.intersection(smh.hash_set)) / len(self.hash_set)
+		
+	def get_scaled_containment(self, smh):
+		bf = 1 - (1 - self.scale_factor) ** len(self.raw_elements)
+		return 1.0 * len(self.hash_set.intersection(smh.hash_set)) / ( len(self.hash_set) * bf )
 
-    def get_sketch_size(self):
-        return len( self.hash_set )
-
-
+	def get_sketch_size(self):
+		return len( self.hash_set )
+		
 def get_hash_from_kmer(kmer, seed=0):
 	hash_value = mmh3.hash64(kmer, seed=seed)[0]
 	if hash_value < 0:
