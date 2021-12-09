@@ -129,16 +129,20 @@ if __name__ == "__main__":
 	
 	sketch_genome = sketches_genome[1]
 	
+	all_hashes_metagenome = ScaledMinHash(1.0, 2**64)
+	add_kmers_in_scaled_minhash(kmers_in_metagenome, all_hashes_metagenome, 0)
+	
+	all_hashes_genome = ScaledMinHash(1.0, 2**64)
+	add_kmers_in_scaled_minhash(kmers_in_genome, all_hashes_genome, 0)
+	
 	for C in containment_ranges:
 		generate_c_percent_of_file(C, g_filename, smallg_filename)
 		kmers_in_small_portion = get_kmers_in_file(smallg_filename, k)
 		#print('kmers in small part: ' + str(len(kmers_in_small_portion)))
 		
-		s1 = ScaledMinHash(1.0, 2**64)
-		add_kmers_in_scaled_minhash(kmers_in_metagenome + kmers_in_small_portion, s1, 0)
-		s2 = ScaledMinHash(1.0, 2**64)
-		add_kmers_in_scaled_minhash(kmers_in_genome, s2, 0)
-		print('true containment: ' + str(s2.get_containment(s1)))
+		all_hashes_super_mg = ScaledMinHash(1.0, 2**64, all_hashes_metagenome.hash_set)
+		add_kmers_in_scaled_minhash(kmers_in_small_portion, all_hashes_super_mg, 0)
+		print('true containment: ' + str(all_hashes_genome.get_containment(all_hashes_super_mg)))
 		
 		scaled_containments = []
 		for seed in seeds:
