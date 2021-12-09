@@ -93,6 +93,49 @@ def generate_c_percent_of_file(c, genome_filename, out_filename):
     f2.write('\n')
     f2.close()
 	
+
+def get_mash_containments(f1, f2, sketch_size, size_union, size_1, num_runs):
+    f = open("script.sh", 'w')
+    for i in range(num_runs):
+        seed_for_mash = i + 1
+        command = "mash dist " + f1 + " " + f2 + " -s " +str(sketch_size)+ " -S " + str(seed_for_mash)
+        f.write(command)
+        f.write("\n")
+    f.close()
+    
+    f = open('mash_output', 'w')
+    cmd = "bash script.sh"
+    cmd_args = cmd.split(' ')
+    subprocess.call(cmd_args, stdout=f)
+    f.close()
+    
+    f = open('mash_jaccards', 'w')
+    cmd = 'cut -f5 mash_output'
+    cmd_args = cmd.split(' ')
+    subprocess.call(cmd_args, stdout=f)
+    f.close()
+    
+    mash_jaccards = []
+    f = open('mash_jaccards', 'r')
+    lines = f.readlines()
+    for line in lines:
+        v1 = float(line.split('/')[0])
+        v2 = float(line.split('/')[1])
+        mash_jaccards.append( 1.0 * v1 / v2 )
+    #print(mash_jaccards)
+    f.close()
+    
+    mash_containments = []
+    for j in mash_jaccards:
+        c = j * 1.0 * size_union / size_1
+        mash_containments.append(c)
+    return mash_containments
+
+def create_super_metagenome(metagenome_filename, small_genome_filename, super_mg_filename):
+    args = ['cat', metagenome_filename, small_genome_filename]
+    f = open(super_mg_filename, 'w')
+    subprocess.call(args, stdout=f)
+    f.close()
 	
 if __name__ == "__main__":
 	#mg_filename = "reads_file.fastq"
@@ -143,6 +186,16 @@ if __name__ == "__main__":
 		all_hashes_super_mg = ScaledMinHash(1.0, 2**64, all_hashes_metagenome.hash_set)
 		add_kmers_in_scaled_minhash(kmers_in_small_portion, all_hashes_super_mg, 0)
 		print('true containment: ' + str(all_hashes_genome.get_containment(all_hashes_super_mg)))
+		
+		smg_filename = 'supermetagenome.fasta'
+		create_super_metagenome(mg_filename, smallg_filename, smg_filename)
+		unique_kmers_union = set(kmers_in_genome + kmers_in_metagenome + kmers_in_small_portion)
+		size_union = len(unique_kmers_union)
+		sketch_size = sketch_genome.get_sketch_size()
+		size_genome = len(set(kmers_in_genome))
+		mash_containments = get_mash_containments(g_filename, smg_filename, sketch_size, size_union, size_genome, num_runs)
+		
+		print(mash_containments)
 		
 		scaled_containments = []
 		for seed in seeds:
