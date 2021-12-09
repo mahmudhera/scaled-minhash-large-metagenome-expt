@@ -152,6 +152,7 @@ if __name__ == "__main__":
 			sc_c = sketch_added.get_containment(sketch_genome)
 			scaled_containments.append(sc_c)
 			print(sc_c)
+			print(sketch_genome.get_containment(sketch_added))
 		
 		print(C, scaled_containments)
 		
