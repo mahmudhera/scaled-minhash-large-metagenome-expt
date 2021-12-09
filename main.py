@@ -138,10 +138,12 @@ def create_super_metagenome(metagenome_filename, small_genome_filename, super_mg
     f.close()
 	
 if __name__ == "__main__":
-	mg_filename = "reads_file.fastq"
-	#mg_filename = 'SRR492190.contigs.fa'
+
+	f = open('results', 'w')
+
+	#mg_filename = "reads_file.fastq"
+	mg_filename = 'SRR492190.contigs.fa'
 	g_filename = 'staphylococcus.fasta'
-	#g_filename = 'SRR492065.contigs.fa'
 	smallg_filename = 'temp.fasta'
 	k = 21
 	#containment_ranges = [0.01] + [0.1*i for i in range(1, 10)] + [0.99]
@@ -179,13 +181,15 @@ if __name__ == "__main__":
 	add_kmers_in_scaled_minhash(kmers_in_genome, all_hashes_genome, 0)
 	
 	for C in containment_ranges:
+		print('C: ' + str(C))
 		generate_c_percent_of_file(C, g_filename, smallg_filename)
 		kmers_in_small_portion = get_kmers_in_file(smallg_filename, k)
 		#print('kmers in small part: ' + str(len(kmers_in_small_portion)))
 		
 		all_hashes_super_mg = ScaledMinHash(1.0, 2**64, all_hashes_metagenome.hash_set)
 		add_kmers_in_scaled_minhash(kmers_in_small_portion, all_hashes_super_mg, 0)
-		print('true containment: ' + str(all_hashes_genome.get_containment(all_hashes_super_mg)))
+		true_c = all_hashes_genome.get_containment(all_hashes_super_mg)
+		print('true containment: ' + str(true_c))
 		
 		print('now doing mash runs..')
 		smg_filename = 'supermetagenome.fasta'
@@ -216,25 +220,9 @@ if __name__ == "__main__":
 			#print(sketch_added.get_scaled_containment(sketch_genome))
 		
 		print(C, scaled_containments)
+		string_list = [str(C), str(true_c), str(np.average(mash_containments)), str(np.var(mash_containments)), str(np.average(scaled_containments)), str(np.var(scaled_containments))]
+		f.write(','.join(string_list))
+		f.write('\n')
+		f.flush()
 		
-		# list = []
-		
-		# for seed in all_seeds:
-			# determine num_union
-			# know how many kmers in one of them already
-			# get mash jaccard
-			# get mash containment
-			# create two msh sketches, and get scaled_containment
-			# add values in the list
-		
-		# after loop, output the value and variance with C
-		
-		#unique_kmers_union = set(kmers_in_genome + kmers_in_metagenome + kmers_in_small_portion)
-		#print('Unique kmers in union:')
-		#print(len(unique_kmers_union))
-		
-		#print("Scaled containment: C(genome in metagenome):")
-		#print(sketch_metagenome.get_scaled_containment(sketch_genome))
-		
-		#print("Scaled containment: C(genome in metagenome+small):")
-		#print(sketch_new.get_scaled_containment(sketch_genome))
+	f.close()
