@@ -111,10 +111,14 @@ if __name__ == "__main__":
 	kmers_in_metagenome = get_kmers_in_file(mg_filename, k)
 	kmers_in_genome = get_kmers_in_file(g_filename, k)
 	
-	print('generating sketch for metagenome')
-	sketch_metagenome = create_scaled_minhash(kmers_in_metagenome, seed, scale_facor)
-	print('sketch_size:')
-	print(sketch_metagenome.get_sketch_size())
+	sketches_metagenome = {}
+	print('generating sketches for metagenome')
+	for seed in seeds:
+		sketches_metagenome[seed] = create_scaled_minhash(kmers_in_metagenome, seed, scale_facor)
+	print('sketch_sizes:')
+	print([sketches_metagenome[seed].get_sketch_size() for seed in seeds])
+	
+	sketch_genome = sketches_metagenome[0]
 	
 	print('generating sketch for kmers in genome')
 	sketch_genome = create_scaled_minhash(kmers_in_genome, seed, scale_facor)
