@@ -128,6 +128,8 @@ def get_mash_containments(f1, f2, sketch_size, size_union, size_1, num_runs):
     mash_containments = []
     for j in mash_jaccards:
         c = j * 1.0 * size_union / size_1
+		if c > 1.0:
+			c = 1.0
         mash_containments.append(c)
     return mash_containments
 
@@ -147,10 +149,10 @@ mg_filename = "reads_file.fastq"
 g_filename = 'staphylococcus.fasta'
 smallg_filename = 'temp.fasta'
 k = 21
-containment_ranges = [0.01] + [0.1*i for i in range(1, 10)] + [0.99]
+containment_ranges = [0.01] + [0.05*i for i in range(1, 20)] + [0.99]
 #containment_ranges = [0.2]
 scale_facor = 0.0005
-num_runs = 20
+num_runs = 30
 seeds = [i for i in range(num_runs)]
 seed = 1
 
