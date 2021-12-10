@@ -128,8 +128,8 @@ def get_mash_containments(f1, f2, sketch_size, size_union, size_1, num_runs):
     mash_containments = []
     for j in mash_jaccards:
         c = j * 1.0 * size_union / size_1
-		if c > 1.0:
-			c = 1.0
+        if c > 1.0:
+            c = 1.0
         mash_containments.append(c)
     return mash_containments
 
