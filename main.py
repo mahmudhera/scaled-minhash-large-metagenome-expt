@@ -152,7 +152,7 @@ k = 21
 containment_ranges = [0.01] + [0.05*i for i in range(1, 20)] + [0.99]
 #containment_ranges = [0.2]
 scale_facor = 0.0005
-num_runs = 30
+num_runs = 20
 seeds = [i for i in range(num_runs)]
 seed = 1
 
